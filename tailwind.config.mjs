@@ -10,6 +10,7 @@ export default {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        siteBg: "#1a1a1a",
       },
     },
   },
