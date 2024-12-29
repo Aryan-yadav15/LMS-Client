@@ -11,6 +11,26 @@ export default function Dashboard() {
   const [courses, setCourses] = useState([]);
   const [internships, setInternships] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Check localStorage for dark mode preference
+    const savedTheme = localStorage.getItem('isDarkMode');
+    if (savedTheme) {
+      setIsDarkMode(JSON.parse(savedTheme));
+    }
+
+    // Listen for changes in dark mode setting
+    const rootElement = document.documentElement;
+    if (isDarkMode) {
+      rootElement.classList.add('dark');
+    } else {
+      rootElement.classList.remove('dark');
+    }
+
+    // Save dark mode preference to localStorage whenever it changes
+    localStorage.setItem('isDarkMode', JSON.stringify(isDarkMode));
+  }, [isDarkMode]);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -19,8 +39,7 @@ export default function Dashboard() {
   }, [status, router]);
 
   useEffect(() => {
-    // TODO: Replace with actual API calls
-    // Simulating API calls for now
+    // Simulate API calls for now
     setTimeout(() => {
       setCourses([
         { id: 1, title: 'Introduction to Web Development', progress: 60, nextLesson: 'JavaScript Basics' },
@@ -48,6 +67,7 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto px-4 py-8 bg-white">
+      <h1>User : {session?.user?.role}</h1>
       {loading ? (
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto"></div>
@@ -138,4 +158,4 @@ export default function Dashboard() {
       )}
     </div>
   );
-} 
+}

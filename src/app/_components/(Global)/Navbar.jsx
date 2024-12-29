@@ -1,6 +1,9 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { Home, BookOpen, GraduationCap, Users, Settings, Bell } from 'lucide-react';
+import { Home, BookOpen, GraduationCap, Users, Settings, Bell, LogOut } from 'lucide-react';
+import { signOut } from 'next-auth/react';
 
 const Navbar = () => {
   return (
@@ -44,6 +47,13 @@ const Navbar = () => {
                          hover:bg-white/10 transition-colors duration-200 group">
           <Settings size={22} className="text-gray-400 group-hover:text-white" />
         </Link>
+        <button 
+          onClick={() => signOut()}
+          className="flex flex-col items-center justify-center w-12 h-12 rounded-xl
+                         hover:bg-white/10 transition-colors duration-200 group"
+        >
+          <LogOut size={22} className="text-gray-400 group-hover:text-white" />
+        </button>
       </div>
     </nav>
   );

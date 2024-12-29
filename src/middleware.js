@@ -4,18 +4,12 @@ import { NextResponse } from 'next/server';
 export default withAuth(
   function middleware(req) {
     const token = req.nextauth.token;
-    const isAdmin = token?.role === 'admin' || token?.role === 'superadmin';
     const isSuperAdmin = token?.role === 'superadmin';
     const pathname = req.nextUrl.pathname;
 
     // Protect admin routes
-    if (pathname.startsWith('/admin') && !isAdmin) {
-      return NextResponse.redirect(new URL('/auth/signin', req.url));
-    }
-
-    // Protect superadmin routes
-    if (pathname.startsWith('/admin/superadmin') && !isSuperAdmin) {
-      return NextResponse.redirect(new URL('/admin', req.url));
+    if (pathname.startsWith('/admin') && !isSuperAdmin) {
+      return NextResponse.redirect(new URL('/', req.url)); // Redirect to homepage if not superadmin
     }
 
     return NextResponse.next();
@@ -29,12 +23,5 @@ export default withAuth(
 
 // Specify which routes to protect
 export const config = {
-  matcher: [
-    '/admin/:path*',
-    '/profile/:path*',
-    '/courses/create',
-    '/workshops/create',
-    '/events/create',
-    '/internships/create',
-  ],
+  matcher: ['/admin/:path*'], // Protect all admin routes
 }; 

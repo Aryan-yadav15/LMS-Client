@@ -3,6 +3,12 @@ import bcrypt from 'bcryptjs';
 import connectDB from '@/lib/mongodb';
 import User from '@/models/User';
 
+const superAdminEmails = [
+  'aryanyadav.devop@gmail.com',
+  'superadmin2@example.com',
+  // Add more superadmin emails here
+];
+
 export async function POST(req) {
   try {
     // Parse request body
@@ -56,12 +62,15 @@ export async function POST(req) {
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 12);
 
+    // Determine user role
+    const role = superAdminEmails.includes(email.toLowerCase()) ? 'superadmin' : 'user';
+
     // Create user
     const user = await User.create({
       name: name.trim(),
       email: email.toLowerCase().trim(),
       password: hashedPassword,
-      role: 'user',
+      role: role,
     });
 
     // Return success response without password
@@ -93,4 +102,4 @@ export async function POST(req) {
       { status: 500 }
     );
   }
-} 
+}
